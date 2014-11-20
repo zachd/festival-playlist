@@ -9,6 +9,7 @@ if(isset($_GET['params'])){
     $params = explode("/", $_GET['params']);
     if (!empty($params[0]) && strcspn($params[0], '0123456789') == strlen($params[0]))
         $params[0] = $params[0] . "14";
+    if(empty($params[0])) $params[0] = "electricpicnic14"; // Default to EP 2014
     if(empty($params[0]) || !ctype_alnum($params[0]) && strpos($params[0], "_") === FALSE || !file_exists("sql/".$params[0].".sqlite3")){
         echo "<b><center>Festival not found: ".$params[0]."</center></b>";
         die();
@@ -144,7 +145,11 @@ $(document).keypress(function(e) {
 <span class="headerspan">
 <h1><a href="http://festivals.zach.ie/<?php echo $festivallower; ?>" title="<?php echo $festival; ?> Festival <?php echo $year; ?>"><img src="img/<?php echo $festivallower; ?>.png" alt="<?php echo $festival; ?> Festival <?php echo $year; ?>"/></a><br /><?php echo (in_array($festivallower, $noimages) ? "" : $festival." Festival ".$year); ?></h1>
 <h2><?php if(isset($_GET['a']) && array_key_exists($_GET['a'], $playlists)) echo "Displaying results for <a target=\"_blank\" href=\"https://www.google.com/search?q=".str_replace(" ", "-", strtolower($_GET['a']))."\" title=\"View ".$_GET['a']." on Google\"><img style=\"width:15px;vertical-align:top;margin-right:2px;\" src=\"img/<?php echo $festivallower; ?>-favicon.png\"><b>".$_GET['a']
-."</b></a>.<br /><br />"; ?>Showing acts sorted by their top YouTube tracks. <br />Click on an artist's name to view their playlist page.
+."</b></a>.<br /><br />"; ?>Showing acts sorted by their top YouTube tracks. <br />Click on an artist's name to view their playlist page. <br /><br />
+<a href="/electricpicnic14" title="Electric Picnic Festival 2014" <?php echo ($festivallower == "electricpicnic14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Electric Picnic</a> | 
+<a href="/forbiddenfruit14" title="Forbidden Fruit Festival 2014"<?php echo ($festivallower == "forbiddenfruit14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Forbidden Fruit</a> | 
+<a href="/life14" title="Life Festival 2014"<?php echo ($festivallower == "life14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Life</a> | 
+<a href="/trinityball14" title="Trinity Ball Festival 2014"<?php echo ($festivallower == "trinityball14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Trinity Ball</a> 
 <br /><?php if(isset($_GET['a'])) echo "<br /><a onclick=\"SCM.loadPlaylist([".rtrim($scriptstring, ",")."]);\">Click to refresh</a> the playlist for ".($_GET['a'] == "" ? "Top Tracks" : $_GET['a'])."."; ?>
 </h2>
 </span>
