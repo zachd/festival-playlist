@@ -1,5 +1,5 @@
 
-festivals
+festival-playlist
 =========
 
 Festival playlisst showing top tracks for artists sorted by YouTube play count.    
