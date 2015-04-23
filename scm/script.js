@@ -188,7 +188,8 @@
 
 	if(window.SCM && window.SCMMusicPlayer) return;
 
-	init();
+  if(!isMobile)
+		init();
 
 	//send config
 	if(config) postConfig(config);
