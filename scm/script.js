@@ -123,6 +123,10 @@
 		inside = function(){
 			//change title
 			window.top.document.title = document.title;
+
+			// change favicon
+			window.top.document.getElementById("favicon").href = document.getElementById("favicon").href;
+
 			//fix links
 			var filter = function(host){
 					host = host.replace(/blogspot.[a-z.]*/i,'blogspot.com');

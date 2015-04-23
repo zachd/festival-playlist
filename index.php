@@ -83,7 +83,7 @@ while($row = $result->fetch()){
 <html>
 <head>
 <title><?php echo $festival; ?> Festival <?php echo $year; ?></title>
-<link rel="SHORTCUT ICON" href="http://festivals.zach.ie/img/<?php echo $festivallower; ?>-favicon.png">
+<link rel="SHORTCUT ICON" href="http://festivals.zach.ie/img/<?php echo $festivallower; ?>-favicon.png" id="favicon">
 <meta property="fb:admins" content="1434685963"/>
 <meta property="og:site_name" content="<?php echo $festival; ?> Festival <?php echo $year; ?>"/>
 <meta property="og:title" content="Top Tracks Playlist - <?php echo $festival; ?> Festival <?php echo $year; ?>"/>
@@ -141,7 +141,7 @@ data-config="{'skin':'skins/simpleBlack/skin.css','volume':50,'autoplay':true,'s
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-49530760-1', 'netsoc.ie');
+  ga('create', 'UA-49530760-1', 'zach.ie');
   ga('send', 'pageview');
 
 $(document).keypress(function(e) {
