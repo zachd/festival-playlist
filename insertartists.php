@@ -4,8 +4,7 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1);
 
-include("playlists.php");
-die();
+include("../playlists.php");
 
 $db = new PDO("sqlite:sql/artists.processing.sqlite3");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -67,7 +66,7 @@ $days = $festivals[$festival];*/
             $check->execute();
             $found = $check->fetch();
             if(!$found){
-                $artistfixed = str_replace("&", "And", str_replace("+", "And", str_replace("'", "", $artist)));
+                $artistfixed = str_replace("&", "And", str_replace("+", "And", str_replace("-", "", str_replace("$$", "ss", str_replace("'", "", $artist)))));
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_RETURNTRANSFER => 1,
@@ -75,7 +74,7 @@ $days = $festivals[$festival];*/
                 ));
                 $resp = json_decode(curl_exec($curl), true);
                 curl_close($curl); 
-
+                
                 if(!$resp){
                   echo "<b>Skipped</b> <i>".$artist."</i> for ".$festival." (<font color=\"red\">ERROR: Youtube Rate Limiting</font>)<br />";
                   continue;
@@ -105,7 +104,7 @@ $days = $festivals[$festival];*/
                         break;
                       }
                       foreach($resptwo['feed']['entry'] as $entry){
-                        if(check_playlist($entry['title']['$t'], $artist)){
+                        if(check_playlist($entry['title']['$t'], str_replace("$$", "ss", $artist))){
                           echo "Using playlist: <b>".$entry['title']['$t']."</b><br />";
                           $foundplaylist = $entry['yt$playlistId']['$t'];
                           $foundplaylistname = $entry['title']['$t'];

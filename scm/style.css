@@ -68,6 +68,13 @@ h2 {
     padding-right: 5px;
 }
 
+.mini-favicon {
+  height: 15px;
+  width: 15px;
+  vertical-align: bottom;
+  margin-right: 2px;
+}
+
 
 /* tables */
 table.tablesorter {

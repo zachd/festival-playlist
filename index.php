@@ -1,7 +1,7 @@
 <?php 
-//ini_set('display_errors',1);
-//ini_set('display_startup_errors',1);
-error_reporting(0);
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 
 include("playlists.php");
 
@@ -11,7 +11,7 @@ if(isset($_GET['params'])){
         $params[0] = $params[0] . "14";
     if(empty($params[0])) $params[0] = "electricpicnic15"; // Default to EP 2015
     if(empty($params[0]) || !ctype_alnum($params[0]) && strpos($params[0], "_") === FALSE || !file_exists("sql/".$params[0].".sqlite3")){
-        echo "<b><center>Festival not found: ".$params[0]."</center></b>";
+        echo '<h2><b><center>Festival not found: <br /><br /><i>'.$params[0].'</i><br /><br /><input action="action" type="button" value="Go Back" onclick="window.history.go(-1); return false;" /></center></b></h2>';
         die();
     }
     $festival = ucwords(substr($params[0], 0, -2));
@@ -60,9 +60,9 @@ $resa = $dba->query("SELECT count(*) FROM artists WHERE festival = '".mysql_real
 $resv = $db->query("SELECT sum(views) FROM videos"); $totviews = $resv->fetchColumn(); 
 $resd = $db->query("SELECT sum(duration) FROM videos"); $totdur = $resd->fetchColumn(); 
 
-if(isset($_GET['a']) && strcasecmp($_GET['a'], "all") == 0){
+if(isset($_GET['a']) && strcasecmp($_GET['a'], "all") == 0)
     $result = $db->query("SELECT v.* FROM videos v NATURAL JOIN ( SELECT name, MAX(views) AS views FROM videos GROUP BY name )  ORDER BY views DESC");
-}else if(isset($_GET['a']) && in_array($_GET['a'], $festivals[strtolower($params[0])][1]))
+else if(isset($_GET['a']) && in_array($_GET['a'], $festivals[strtolower($params[0])][1]))
     $result = $db->query("SELECT * FROM videos WHERE name = '".mysql_real_escape_string($_GET['a'])."' ORDER BY views DESC");
 else 
     $result = $db->query("SELECT * FROM videos ".(isset($_GET['nogroove']) ? 'WHERE name != \'Groove Armada\' ' : (isset($_GET['noboiler']) ? 'WHERE duration <= 3600 ' : ''))."ORDER BY views DESC".(isset($_GET['n']) 
@@ -76,7 +76,7 @@ while($row = $result->fetch()){
     $playlistidforartist = array_values(array_filter($playlists, function($ar) {global $row; return ($ar['name'] == $row['name']);}));
     $tablestring = $tablestring . "<tr><td>".$count++."</td><td><img src=\"http://i.ytimg.com/vi/".$row['id']."/default.jpg\" style=\"height:40px;\" /></td><td><a href=\"?a=".urlencode($row['name'])."\">".$row['name']."</a></td>
     <td>".number_format($row['views'])."</td><td><a onclick=\"SCM.play(".$stringtoadd.");\" target=\"_blank\" class=\"link\">".$row['title']."</a></td>
-    <td>".number_format($row['duration']/60, 1)."m</td><td>".showrating($row['rating'])."</td><td><a href=\"".$row['link']."&list=".$playlistidforartist[0]['id']/*$playlists[$row['name']]href=\"http://youtube.com/playlist?list=".$playlists[$row['name']]*/."\" target=\"_blank\" class=\"playlist\">&#9654; YouTube</a></td></tr>";
+    <td>".number_format($row['duration']/60, 1)."m</td><td>".showrating($row['rating'])."</td><td><a href=\"".$row['link']."&list=".($playlistidforartist ? $playlistidforartist[0]['id'] : "")/*$playlists[$row['name']]href=\"http://youtube.com/playlist?list=".$playlists[$row['name']]*/."\" target=\"_blank\" class=\"playlist\">&#9654; YouTube</a></td></tr>";
     $scriptstring = $scriptstring . $stringtoadd . ",";
 }
 ?>
@@ -161,16 +161,28 @@ $(document).keypress(function(e) {
 </head>
 <body>
 <span class="headerspan">
-<h1><a href="http://festivals.zach.ie/<?php echo $festivallower; ?>" title="<?php echo $festival; ?> Festival <?php echo $year; ?>"><img src="img/<?php echo $festivallower; ?>.png" alt="<?php echo $festival; ?> Festival <?php echo $year; ?>"/></a><br /><?php echo (in_array($festivallower, $noimages) ? "" : $festival." Festival ".$year); ?></h1>
+<h1><a href="http://festivals.zach.ie/<?php echo $festivallower; ?>" title="<?php echo $festival; ?> Festival <?php echo $year; ?>"><img src="img/<?php echo $festivallower; ?>.png" alt="<?php echo $festival; ?> Festival <?php echo $year; ?>"/></a><br /><?php echo (in_array($festivallower, $noimages) ? "" : $festival." Festival "); ?></h1>
 <h2><?php if(isset($_GET['a']) && strcasecmp($_GET['a'], "all") !== 0) echo "Displaying results for <a target=\"_blank\" href=\"https://www.google.com/search?q=".urlencode(strtolower($_GET['a']))."\" title=\"View ".$_GET['a']." on Google\"><img style=\"width:15px;vertical-align:top;margin-right:2px;\" src=\"img/".$festivallower."-favicon.png\"><b>".$_GET['a']
 ."</b></a>.<br /><br />"; ?>Showing acts sorted by their top YouTube tracks. <br />Click an artist's name to view their playlist page. <br /><br /><b>2015:</b>
-<a href="/electricpicnic15" title="Electric Picnic Festival 2015" <?php echo ($festivallower == "electricpicnic15" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Electric Picnic</a> | 
-<a href="/splendourinthegrass15" title="Splendour In The Grass Festival 2015" <?php echo ($festivallower == "splendourinthegrass15" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Splendour In The Grass</a><br />
+<a href="/electricpicnic15" title="Electric Picnic Festival 2015" <?php echo ($festivallower == "electricpicnic15" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/electricpicnic15-favicon.png" class="mini-favicon"/>Electric Picnic</a> | 
+<a href="/forbiddenfruit15" title="Forbidden Fruit Festival 2015"<?php echo ($festivallower == "forbiddenfruit15" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/forbiddenfruit15-favicon.png" class="mini-favicon"/>Forbidden Fruit</a> | 
+<a href="/longitude15" title="Longitude Festival 2015"<?php echo ($festivallower == "longitude15" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/longitude15-favicon.png" class="mini-favicon"/>Longitude</a> | 
+<a href="/splendourinthegrass15" title="Splendour In The Grass Festival 2015" <?php echo ($festivallower == "splendourinthegrass15" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/splendourinthegrass15-favicon.png" class="mini-favicon"/>Splendour In The Grass</a><br />
 <b>2014:</b>
-<a href="/electricpicnic14" title="Electric Picnic Festival 2014" <?php echo ($festivallower == "electricpicnic14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Electric Picnic</a> | 
-<a href="/forbiddenfruit14" title="Forbidden Fruit Festival 2014"<?php echo ($festivallower == "forbiddenfruit14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Forbidden Fruit</a> | 
-<a href="/life14" title="Life Festival 2014"<?php echo ($festivallower == "life14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Life</a> | 
-<a href="/trinityball14" title="Trinity Ball Festival 2014"<?php echo ($festivallower == "trinityball14" ? "style=\"font-weight:bold; color:black;\"" : ""); ?>>Trinity Ball</a> 
+<a href="/electricpicnic14" title="Electric Picnic Festival 2014" <?php echo ($festivallower == "electricpicnic14" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/electricpicnic14-favicon.png" class="mini-favicon"/>Electric Picnic</a> | 
+<a href="/forbiddenfruit14" title="Forbidden Fruit Festival 2014"<?php echo ($festivallower == "forbiddenfruit14" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/forbiddenfruit14-favicon.png" class="mini-favicon"/>Forbidden Fruit</a> | 
+<a href="/life14" title="Life Festival 2014"<?php echo ($festivallower == "life14" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/life14-favicon.png" class="mini-favicon"/>Life</a> | 
+<a href="/latitude14" title="Latitude Festival 2014"<?php echo ($festivallower == "latitude14" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/latitude14-favicon.png" class="mini-favicon"/>Latitude</a> | 
+<a href="/trinityball14" title="Trinity Ball Festival 2014"<?php echo ($festivallower == "trinityball14" ? "style=\"font-weight:bold;\"" : ""); ?>>
+<img src="img/trinityball14-favicon.png" class="mini-favicon"/>Trinity Ball</a> 
 <br /><?php if(isset($_GET['a'])) echo "<br /><a onclick=\"SCM.loadPlaylist([".rtrim($scriptstring, ",")."]);\">Click to refresh</a> the playlist for ".($_GET['a'] == "" ? "Top Tracks" : $_GET['a'])."."; ?>
 </h2>
 </span>
@@ -195,5 +207,6 @@ $(document).keypress(function(e) {
 </table> 
 <div id="footer">Artists: <?php foreach($playlists as $result) echo '<a href="?a='.urlencode($result['name']).'">'.$result['name'].'</a>'
     .($result['name'] === 'Godfathers' ? '.' : ($result['name'] === '2ManyDJs' ? '/' : ', ')).($result['name'] === 'Original Rudeboys' ? '<br />' : ''); ?><br /><br />
-<div id="footer">No Copyright Assumed. Site is Unofficial.<br />Artists: <?php echo number_format($totart); ?> - Videos: <?php echo number_format($rows); ?> - <a href="?a=all" title="Show the Top Song for each Artist">Show Uniques</a><br />Created by Zachary (Show <a href="?n=500">500</a>, <a href="?n=1000">1000</a>, <a href="?n=<?php echo $rows; ?>">All</a>)<br /><br /></div>
+<div id="footer">No Copyright Assumed. Site is Unofficial.<br />Artists: <?php echo number_format($totart); ?> - Videos: <?php echo number_format($rows); ?> - <a href="?a=all" title="Show the Top Song for each Artist">Show Uniques</a><br />
+<a href="https://github.com/zachd/festival-playlist" title="View on GitHub" target="_blank">View on GitHub</a> (Show <a href="?n=500">500</a>, <a href="?n=1000">1000</a>, <a href="?n=<?php echo $rows; ?>">All</a>)<br /><br /></div>
 </body></html>
