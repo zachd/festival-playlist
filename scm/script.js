@@ -181,7 +181,7 @@
 			});
 
 		};
-
+    window.postMessage = postMessage;
 	//SCM interface
 	var SCM = {};
 

@@ -14,13 +14,21 @@ var	playback = null,
 				song().on(false);
 				value = (value instanceof Song) ? value:empty;
 				value.on(true);
-				song(value);
-				//when song change trigger start 
-				start();
+				// Custom check for already playing song
+				if (value.title() === "" || song().title() !== value.title()) {
+					song(value);
+					start();
+				} else {
+					song(value);
+				}
 			}
 		});
 	})(),
-
+    findSong = function(source, title) {
+	    return source.filter(function( obj ) {
+	        return obj.title() === title;
+	    })[0];
+	},
 	playlist = ko.observableArray(),
 	autoPlay = ko.observable(false),
 	queue = function(song){
@@ -47,7 +55,14 @@ var	playback = null,
 			message(null);
 			playlist(result);
 			var list = isShuffle() ? shuffledList():filteredList();
-			current(list[0]);
+			// Custom song selection code
+			if (isPlay()) {
+				var song = findSong(list, current().title());
+				if (song) current(song);
+			} else {
+				current(list[0]);
+			}
+			// End custom song selection code
 			isPlay(autoPlay());
 		}
 		return function(data){

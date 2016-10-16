@@ -1,6 +1,6 @@
 define([
 	'scm','jquery',
-	'http://www.youtube.com/iframe_api'
+	'//www.youtube.com/iframe_api'
 	],function(SCM,$){
 
 	var id="SCMYoutube",
@@ -8,12 +8,18 @@ define([
 		playObserve, volumeObserve, positionObserve;
 
 	$(document.body).prepend(
-	'<div style="position:absolute;left:-1999px;right:-1999px;"><div id="'+id+'"></div></div>');
+	'<div id="video-container"><div><div id="'+id+'"></div></div></div>');
 
 	window.onYouTubeIframeAPIReady = function(){
 		player = new YT.Player(id,{
-			height:'390',
-			width:'640',
+			// Custom player vars
+			playerVars: {
+				controls: 0,
+				showinfo: 0,
+				iv_load_policy: 3
+			},
+			width: '100%',
+			height: 'auto',
 			events: {
 				onReady:function(){
 					callback({on:on,off:off});
@@ -32,9 +38,18 @@ define([
 		intervalId = setInterval(interval,100);
 
 		var videoId = parseVideoId(url);
+
+		// Begin custom event code
+		var changeEvent = new CustomEvent("player-change", { "detail": videoId});
+		var pageFrame = document.getElementById('content').contentWindow;
+		pageFrame.document.dispatchEvent(changeEvent);
+		// End custom event code
+
 		player.setVolume(SCM.volume());
-		if(SCM.isPlay())
+
+		if(SCM.isPlay()) {
 			player.loadVideoById(videoId);
+		}
 		else
 			player.cueVideoById(videoId);
 	}

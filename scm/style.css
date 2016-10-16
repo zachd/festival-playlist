@@ -1,53 +1,28 @@
 /* main css */
 
 * {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
 }
 
-td {
-    vertical-align: middle !important;
-}
 
 .both {
     float:right;
     padding-right: 10px;
 }
 
-td a:hover {
-  background-color: #F0F0F0;
-}
-
-td a {
-  padding-top: 10px;
-  display:inline-block;
-  height:100%;
-  width:100%;
-}
-
 a {
     text-decoration: none;
-    color: blue;
+    color: #036;
     cursor: pointer;
 }
 
-.playlist {
-    font-weight: bold;
-}
-
-.title:hover {
-    background-color: #ccc !important;
-}
-
-#footer {
-    text-align:center;
-}
-
+/* site */
 h1 {
     background-color:#FFFFFF;
-    text-align: center;
-    margin-bottom: 5px;
-    font-size: 36px;
+    margin: 5px 0px;
+    font-size: 24px;
+    font-weight: normal;
 }
 
 h2 {
@@ -56,7 +31,37 @@ h2 {
     text-align: center;
 }
 
-.headerspan {
+h1, h2 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+h2.festivals {
+    display: block;
+}
+
+h1 img {
+  max-height: 80px;
+}
+
+.sidebar h1 {
+  margin: 0px 0px 15px 0px;
+  width: 100%;
+  max-width: 80%;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar h1 img {
+  width: 20px;
+  margin-right: 8px;
+  margin-bottom: 5px;
+  vertical-align: text-bottom;
+}
+
+.header {
     backgrond-color:#FFFFFF;
     width: 100%;
     height: 100%;
@@ -76,45 +81,115 @@ h2 {
 }
 
 
-/* tables */
-table.tablesorter {
-	font-family:arial;
-	background-color: #CDCDCD;
-	margin:10px 0pt 15px;
-	font-size: 8pt;
-	width: 100%;
-	text-align: left;
+/* table */
+div.container {
+  font-size: 0;
 }
-table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	background-color: #e6EEEE;
-	border: 1px solid #FFF;
-	font-size: 8pt;
-	padding: 4px;
+
+#video-container {
+  position: fixed;width: calc(55% - 15px);margin-top: 160px;padding: 20px;
 }
-table.tablesorter thead tr .header {
-	background-image: url(bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
+
+#video-container div{
+  position: relative;padding-bottom: 56.25%; /* 16:9 */padding-top: 25px;height: 0;
 }
-table.tablesorter tbody td {
-	color: #3D3D3D;
-	padding: 4px;
-	background-color: #FFF;
-	vertical-align: top;
+
+div.footer {
+  text-align: center;
+  margin-bottom: 30px;
 }
-table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
+
+div.content {
+  width: 60%;
+  position: fixed;
+  text-align: center;
 }
-table.tablesorter thead tr .headerSortUp {
-	background-image: url(asc.gif);
+
+div.sidebar {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  width: 40%;
 }
-table.tablesorter thead tr .headerSortDown {
-	background-image: url(desc.gif);
+
+div.row {
+    height: 90px;
+    position: relative;
+    margin-bottom: 10px;
 }
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #8dbdd8;
+
+div.row.playing:hover {
+  cursor: default;
 }
+
+div.row.playing:hover .title {
+  color: black;
+  text-decoration: none;
+}
+
+div.row.playing .title{
+  background: url('/img/bars.gif') 0 2px no-repeat;
+  text-indent: 20px;
+}
+
+div.row:hover {
+  cursor: pointer;
+}
+
+div.row:hover .title {
+  color: #036;
+}
+
+div.index {
+  display: none;
+}
+
+div.row .image img{
+  height: 90px;
+}
+
+div.row .title {
+  font-size: 130%;
+  max-height: 2.4em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+div.row .artist {
+  display: block;
+}
+
+div.row .artist a:hover {
+  text-decoration: underline;
+}
+
+div.row .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+div.row .description {
+  margin-left: 170px;
+  line-height: 1.2;
+}
+
+div.row .views, div.row .artist {
+  color: #767676
+}
+
+/* site */
+.playlist {
+    font-weight: bold;
+}
+
+#footer {
+    text-align:center;
+}
+
+
 
 .settings {
   text-align: center;
@@ -128,10 +203,15 @@ background-color: #8dbdd8;
     padding: 5px;
     margin: 3px 0px;
 }
-.button a{
+.button a {
     text-shadow: 0 1px 2px rgba(255,255,255, 0.25);
     color: black;
 }
+.button.selected {
+  font-weight: bold;
+  background: #eee;
+}
+
 .button:hover {
     background: #eee;
     cursor: pointer;
@@ -157,4 +237,97 @@ background-color: #8dbdd8;
     -moz-border-radius-bottomright: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+@media only screen and (max-width: 960px) and (orientation: landscape) {
+  h1 {
+    font-size: 20px;
+    margin: 0px;
+  }
+  h1 img {
+    max-height: 45px;
+  }
+  h2 {
+    margin-top: 0px;
+    font-size: 60%;
+  }
+  div.settings .button, 
+  h2.options .button a,
+  h2.options .button b {
+    font-size: 80%;
+  }
+  h2.festivals, 
+  div.settings .show {
+    display: none;
+  }
+  #video-container {
+    width:45%;
+    margin-top:50px;
+    padding:10px;
+  }
+  div.row {
+    height: 60px;
+  }
+  div.row .title {
+    font-size: 120%;
+  }
+  div.row .image img {
+    height: 60px;
+  }
+  div.row .description {
+    margin-left: 112px;
+  }
+  div.row .description,
+  div.row .artist a,
+  div.row .views {
+    font-size:85%;
+  }
+  div.content, div.sidebar {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 480px) { 
+  h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+  .sidebar h1 {
+    max-width: 100%;
+  }
+  #video-container {
+    width: 100%;
+    margin-top: 0px;
+  }
+  div.settings .show {
+    display: none;
+  }
+  div.row {
+    height: 70px;
+  }
+  div.row .image img {
+    height: 70px;
+  }
+  div.row .title {
+    font-size: 110%;
+  }
+  div.row .description {
+    margin-left: 130px;
+  }
+  div.content {
+    position: relative;
+    width: 100%;
+  }
+  div.sidebar {
+    position: relative;
+    width: 100%;
+  }
+  div.row.playing {
+    background: url('/img/bars.gif') no-repeat;
+    background-position: bottom 5px right 5px;
+  }
+  div.row.playing .title{
+    background: none;
+    text-indent: 0px;
+  }
 }
